@@ -1,0 +1,11 @@
+# Test-only dependencies. The suite is not runnable from requirements.txt
+# alone — pytest was missing from every environment until 2026-09-04,
+# which meant 280 tests existed and none of them could be run.
+#
+#   venv\Scripts\activate
+#   pip install -r requirements.txt -r requirements-dev.txt
+#   pytest tests/ -v
+#
+# There is deliberately no pytest.ini or pyproject.toml; tests/conftest.py
+# does the sys.path and DB_* environment bootstrap instead.
+pytest>=9.0

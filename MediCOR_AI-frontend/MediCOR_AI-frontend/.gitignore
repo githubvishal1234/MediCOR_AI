@@ -1,0 +1,24 @@
+# Secrets — NEVER commit.
+.env
+.env.*
+!.env.example
+
+# Build / deps
+node_modules/
+dist/
+dist-ssr/
+.smoke-out/
+.vite/
+*.local
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Ad-hoc backup copies. The root .gitignore covers these, but only
+# for a repository rooted at the parent — `git init` in this
+# directory would otherwise track `agent.py.bak-filler` and friends.
+*.bak
+*.bak-*
+_backups/

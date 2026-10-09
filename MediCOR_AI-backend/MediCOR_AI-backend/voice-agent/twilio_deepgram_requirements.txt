@@ -1,0 +1,45 @@
+# Twilio + Deepgram voice gateway (voice-agent/twilio_deepgram/).
+#
+# Install into the SAME venv as the backend, exactly as the LiveKit
+# worker does:
+#
+#     cd medicare-voice-ai-backend-FIXED/medicare-voice-ai-backend
+#     venv\Scripts\activate
+#     pip install -r voice-agent/twilio_deepgram_requirements.txt
+#
+# THE POINT OF THIS FILE IS THAT IT ADDS NOTHING.
+#
+# Every line below is already installed by the backend's own
+# requirements.txt. Running the command above against a working backend
+# venv installs zero new packages, and that is deliberate:
+#
+#   * No `deepgram-sdk`. Deepgram's Voice Agent API is documented JSON
+#     plus binary frames over a websocket, and `websockets` is already
+#     here. The SDK would add a package with its own pydantic and httpx
+#     floors to a venv shared with a FastAPI app pinned to
+#     pydantic==2.9.2 — and this venv has been broken by dependency
+#     drift before. If its typed events later earn that risk, only
+#     twilio_deepgram/deepgram_agent.py changes.
+#
+#   * No `twilio`. It would bring requests, PyJWT and aiohttp in order
+#     to do three things this codebase already does with httpx and the
+#     standard library: verify a request signature (identical algorithm
+#     to routers/inbound_messages.py), build two short TwiML documents,
+#     and POST to the REST API (identical pattern to
+#     notification_service._send_twilio_message).
+#
+# The listed versions are the backend's own pins, repeated so this file
+# is honest about what the gateway needs rather than silently depending
+# on another file's contents — the same reason voiceagent_requirements.txt
+# repeats its LiveKit lines.
+
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+httpx==0.28.1
+python-dotenv>=1.0.0
+
+# Imported directly by deepgram_agent.py rather than used through
+# uvicorn, so it is declared rather than inherited. uvicorn[standard]
+# installs it either way; a future uvicorn that dropped it would
+# otherwise break the gateway with no clue as to why.
+websockets>=12.0

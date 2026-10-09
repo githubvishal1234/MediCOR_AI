@@ -1,0 +1,72 @@
+# ---------------------------------------------------------------
+# Secrets — NEVER commit. See SECURITY-ROTATION.md.
+# ---------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+secrets/
+
+# Ad-hoc backup copies. `.env.*` above catches `.env.backup` and
+# `.env.bak-*`, but NOT `agent.py.bak-filler`, `env.pre-twilio` or
+# `Analytics.jsx.bak-charts` — those matched nothing and would have been
+# committed. Some carry live credentials verbatim.
+*.bak
+*.bak-*
+# Everything above was consolidated into _backups/ (see its README).
+# Three of those files are copies of .env and hold live credentials,
+# so the directory is ignored wholesale rather than by extension.
+_backups/
+*.pre-*
+*.orig
+*.rej
+env.pre-*
+_twilio-migration-backup/
+
+# ---------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ---------------------------------------------------------------
+# Node / frontend
+# ---------------------------------------------------------------
+node_modules/
+dist/
+dist-ssr/
+.vite/
+*.local
+
+# ---------------------------------------------------------------
+# Runtime data (may contain PHI — never commit)
+# ---------------------------------------------------------------
+uploads/
+*.db
+*.sqlite
+*.sqlite3
+logs/
+*.log
+
+# ---------------------------------------------------------------
+# Editors / OS
+# ---------------------------------------------------------------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Downloaded embedding model (fastembed/ONNX, ~64 MB).
+# embedding_service.py re-downloads it on first use, and degrades to
+# empty retrieval rather than failing if it cannot -- so it is a cache,
+# not a dependency. It was committed once and stripped from history.
+.model_cache/

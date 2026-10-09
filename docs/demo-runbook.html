@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediCOR Demo Runbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+  :root {
+    --ground: #f7f9f9;
+    --surface: #ffffff;
+    --surface-sunk: #eef3f2;
+    --ink: #12201f;
+    --ink-soft: #334544;
+    --muted: #5d6f6e;
+    --line: #d8e3e1;
+    --line-soft: #e7eeed;
+    --accent: #0f766e;
+    --accent-soft: #e0f0ee;
+    --warn: #b45309;
+    --warn-soft: #fdf0dd;
+    --good: #15803d;
+    --good-soft: #e3f3e8;
+    --crit: #b91c1c;
+    --crit-soft: #fce9e9;
+
+    --f-display: "Newsreader", Georgia, "Times New Roman", serif;
+    --f-body: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0e1615;
+      --surface: #16211f;
+      --surface-sunk: #101a19;
+      --ink: #e6efed;
+      --ink-soft: #c3d3d0;
+      --muted: #8ca4a1;
+      --line: #2a3936;
+      --line-soft: #1f2c2a;
+      --accent: #2dd4bf;
+      --accent-soft: #14302d;
+      --warn: #f0b45f;
+      --warn-soft: #33260f;
+      --good: #5cc98a;
+      --good-soft: #122a1b;
+      --crit: #f08a8a;
+      --crit-soft: #331616;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0e1615;
+    --surface: #16211f;
+    --surface-sunk: #101a19;
+    --ink: #e6efed;
+    --ink-soft: #c3d3d0;
+    --muted: #8ca4a1;
+    --line: #2a3936;
+    --line-soft: #1f2c2a;
+    --accent: #2dd4bf;
+    --accent-soft: #14302d;
+    --warn: #f0b45f;
+    --warn-soft: #33260f;
+    --good: #5cc98a;
+    --good-soft: #122a1b;
+    --crit: #f08a8a;
+    --crit-soft: #331616;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 40px 28px 96px;
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+  }
+  .eyebrow {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 10px;
+  }
+  h1 {
+    font-family: var(--f-display);
+    font-size: clamp(34px, 5.4vw, 52px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0 0 12px;
+    text-wrap: balance;
+  }
+  .standfirst {
+    font-family: var(--f-display);
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  /* ---------- essentials strip ---------- */
+  .essentials {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-bottom: 40px;
+  }
+  .ess {
+    background: var(--surface);
+    padding: 14px 16px;
+  }
+  .ess dt {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  .ess dd {
+    margin: 0;
+    font-family: var(--f-mono);
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--ink);
+    word-break: break-all;
+  }
+
+  /* ---------- layout ---------- */
+  .cols {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    gap: 44px;
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    .cols { grid-template-columns: 1fr; gap: 28px; }
+    .rail { position: static !important; }
+  }
+
+  .rail {
+    position: sticky;
+    top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .rail-head {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-bottom: 10px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--line);
+  }
+  .rail a {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-size: 14px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .rail a:hover, .rail a:focus-visible { color: var(--accent); }
+  .rail a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .rail .n {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--muted);
+    min-width: 15px;
+  }
+  .rail .t { font-size: 11px; color: var(--muted); margin-left: auto; font-family: var(--f-mono); }
+
+  /* ---------- acts ---------- */
+  .act { margin-bottom: 52px; scroll-margin-top: 24px; }
+  .act-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 10px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .act-num {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--surface);
+    background: var(--accent);
+    padding: 3px 8px;
+    letter-spacing: 0.06em;
+  }
+  .act-head h2 {
+    font-family: var(--f-display);
+    font-size: 27px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin: 0;
+    flex: 1;
+    text-wrap: balance;
+  }
+  .act-time {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 168px 1fr;
+    gap: 24px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .step:last-child { border-bottom: none; }
+  @media (max-width: 700px) {
+    .step { grid-template-columns: 1fr; gap: 10px; }
+  }
+  .step-screen { }
+  .step-screen .name {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+    line-height: 1.35;
+  }
+  .route {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 2px 6px;
+    display: inline-block;
+    word-break: break-all;
+  }
+  .step-body p { margin: 0 0 10px; }
+  .step-body p:last-child { margin-bottom: 0; }
+
+  .say {
+    font-family: var(--f-display);
+    font-size: 17.5px;
+    line-height: 1.55;
+    color: var(--ink);
+    border-left: 3px solid var(--accent);
+    padding: 2px 0 2px 16px;
+    margin: 0 0 12px;
+  }
+  .say::before {
+    content: "Say";
+    display: block;
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .do {
+    font-size: 14.5px;
+    color: var(--ink-soft);
+  }
+  .do strong { color: var(--ink); font-weight: 600; }
+
+  code {
+    font-family: var(--f-mono);
+    font-size: 0.88em;
+    background: var(--surface-sunk);
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+
+  pre {
+    font-family: var(--f-mono);
+    font-size: 13px;
+    line-height: 1.65;
+    background: var(--surface-sunk);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin: 0 0 14px;
+  }
+  pre code { background: none; padding: 0; }
+
+  /* ---------- notes ---------- */
+  .note {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    padding: 12px 14px;
+    font-size: 14.5px;
+    line-height: 1.55;
+    margin: 12px 0 0;
+    border: 1px solid var(--line);
+  }
+  .note .tag {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding-top: 3px;
+  }
+  .note.warn { background: var(--warn-soft); border-color: var(--warn); }
+  .note.warn .tag { color: var(--warn); }
+  .note.good { background: var(--good-soft); border-color: var(--good); }
+  .note.good .tag { color: var(--good); }
+  .note.crit { background: var(--crit-soft); border-color: var(--crit); }
+  .note.crit .tag { color: var(--crit); }
+  .note p { margin: 0 0 8px; }
+  .note p:last-child { margin-bottom: 0; }
+
+  /* ---------- checklist ---------- */
+  .checks {
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-bottom: 16px;
+  }
+  .check {
+    background: var(--surface);
+    display: grid;
+    grid-template-columns: 26px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 16px;
+  }
+  @media (max-width: 620px) {
+    .check { grid-template-columns: 26px 1fr; }
+    .check .verdict { grid-column: 2; }
+  }
+  .box {
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--muted);
+    border-radius: 2px;
+  }
+  .check .what { font-size: 14.5px; }
+  .check .what .sub { display: block; font-size: 12.5px; color: var(--muted); font-family: var(--f-mono); margin-top: 2px; word-break: break-all; }
+  .verdict {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 3px 8px;
+    white-space: nowrap;
+  }
+  .verdict.ok { color: var(--good); background: var(--good-soft); }
+  .verdict.risk { color: var(--warn); background: var(--warn-soft); }
+
+  /* ---------- qa ---------- */
+  .qa { border-top: 1px solid var(--line); }
+  .qa-item { padding: 16px 0; border-bottom: 1px solid var(--line-soft); }
+  .qa-q {
+    font-family: var(--f-display);
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 7px;
+    text-wrap: balance;
+  }
+  .qa-a { margin: 0; font-size: 15px; color: var(--ink-soft); }
+
+  h3.sub {
+    font-family: var(--f-display);
+    font-size: 21px;
+    font-weight: 600;
+    margin: 32px 0 12px;
+    letter-spacing: -0.01em;
+  }
+
+  .kicker {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 8px;
+  }
+
+  hr.rule {
+    border: none;
+    border-top: 2px solid var(--ink);
+    margin: 56px 0 28px;
+  }
+
+  .foot {
+    margin-top: 56px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font-size: 13.5px;
+    color: var(--muted);
+    font-family: var(--f-mono);
+    line-height: 1.7;
+  }
+</style>
+
+<style>body{margin:0}img{max-width:100%}</style>
+<style>
+@page { size: A4; margin: 14mm 13mm; }
+@media print {
+  :root {
+    --ground:#ffffff!important; --surface:#ffffff!important; --surface-sunk:#f2f6f5!important;
+    --ink:#12201f!important; --ink-soft:#334544!important; --muted:#5d6f6e!important;
+    --line:#cfdcda!important; --line-soft:#e7eeed!important;
+    --accent:#0f766e!important; --accent-soft:#e0f0ee!important;
+    --warn:#b45309!important; --warn-soft:#fdf0dd!important;
+    --good:#15803d!important; --good-soft:#e3f3e8!important;
+    --crit:#b91c1c!important; --crit-soft:#fce9e9!important;
+  }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  body { background:#fff!important; font-size:10.5pt; }
+  .wrap { max-width:none; padding:0; }
+  .cols { grid-template-columns:1fr!important; gap:0!important; }
+  .rail { display:none!important; }
+  .screen,.note,.fgroup,figure,.qa-item,.check,.ess,.step { break-inside:avoid; page-break-inside:avoid; }
+  .group,.act { break-inside:auto; }
+  .group-head,.act-head { break-after:avoid; page-break-after:avoid; }
+  h1 { font-size:25pt; }
+  .standfirst { font-size:12.5pt; }
+  .group-head h2,.act-head h2 { font-size:15pt; }
+  .purpose-lead { font-size:15pt; }
+  hr.rule { break-before:page; page-break-before:always; border-top-width:1px; margin:0 0 20px; }
+  a { color:inherit; text-decoration:none; }
+  .foot { break-inside:avoid; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">Running order · 04 Sep 2026 · 10:00 IST</p>
+    <h1>MediCOR Demo Runbook</h1>
+    <p class="standfirst">Twenty-two minutes, five acts. Lead with the AI answering a live call, then show the clinic dashboard filling in behind it — the call they just heard becomes the row they're looking at.</p>
+  </header>
+
+  <dl class="essentials">
+    <div class="ess"><dt>Dashboard</dt><dd>localhost:5174</dd></div>
+    <div class="ess"><dt>Clinic login</dt><dd>admin@healthlinkclinic.com<br>password123</dd></div>
+    <div class="ess"><dt>Platform console</dt><dd>/admin/login<br>admin@medivoice.local</dd></div>
+    <div class="ess"><dt>API</dt><dd>127.0.0.1:8000</dd></div>
+    <div class="ess"><dt>Demo org</dt><dd>HealthLink Clinic<br>Asia/Kolkata</dd></div>
+  </dl>
+
+  <div class="cols">
+
+    <nav class="rail" aria-label="Demo sequence">
+      <div class="rail-head">Sequence</div>
+      <a href="#preflight"><span class="n">00</span><span>Pre-flight</span><span class="t">5m</span></a>
+      <a href="#act1"><span class="n">01</span><span>The pitch</span><span class="t">2m</span></a>
+      <a href="#act2"><span class="n">02</span><span>Live call</span><span class="t">6m</span></a>
+      <a href="#act3"><span class="n">03</span><span>The clinic</span><span class="t">8m</span></a>
+      <a href="#act4"><span class="n">04</span><span>Trust</span><span class="t">3m</span></a>
+      <a href="#act5"><span class="n">05</span><span>Platform</span><span class="t">3m</span></a>
+      <a href="#avoid"><span class="n">—</span><span>Don't touch</span></a>
+      <a href="#qa"><span class="n">—</span><span>Q&amp;A prep</span></a>
+    </nav>
+
+    <main>
+
+      <!-- ============ PREFLIGHT ============ -->
+      <section class="act" id="preflight">
+        <div class="act-head">
+          <span class="act-num">00</span>
+          <h2>Pre-flight</h2>
+          <span class="act-time">Start 09:45</span>
+        </div>
+
+        <div class="checks">
+          <div class="check">
+            <span class="box" aria-hidden="true"></span>
+            <span class="what">Backend API responding<span class="sub">curl 127.0.0.1:8000/health → {"status":"ok"}</span></span>
+            <span class="verdict ok">verified</span>
+          </div>
+          <div class="check">
+            <span class="box" aria-hidden="true"></span>
+            <span class="what">Dashboard loads and logs in<span class="sub">localhost:5174/login</span></span>
+            <span class="verdict ok">verified</span>
+          </div>
+          <div class="check">
+            <span class="box" aria-hidden="true"></span>
+            <span class="what">Voice agent worker registered<span class="sub">agent_name: outbound-caller · region India South</span></span>
+            <span class="verdict ok">verified</span>
+          </div>
+          <div class="check">
+            <span class="box" aria-hidden="true"></span>
+            <span class="what">Console session rehearsed end to end<span class="sub">68s session, 9 transcript messages, backend wrote the call</span></span>
+            <span class="verdict ok">verified</span>
+          </div>
+          <div class="check">
+            <span class="box" aria-hidden="true"></span>
+            <span class="what">Network stable — no VPN, no sleeping Wi-Fi adapter<span class="sub">DNS dropped 80s at 08:14 and the agent disconnected</span></span>
+            <span class="verdict risk">watch</span>
+          </div>
+          <div class="check">
+            <span class="box" aria-hidden="true"></span>
+            <span class="what">Inbound phone number<span class="sub">carrier-side routing unresolved — not in this demo</span></span>
+            <span class="verdict risk">excluded</span>
+          </div>
+        </div>
+
+        <p class="kicker">Open before you share your screen</p>
+        <pre><code>Tab 1  localhost:5174/          landing page
+Tab 2  localhost:5174/app       dashboard (logged in)
+Tab 3  localhost:5174/admin     platform console (logged in)
+Terminal  voice-agent&gt; agent.py console   ready, not started</code></pre>
+
+        <div class="note warn">
+          <span class="tag">Order</span>
+          <p>Log both sessions in <em>before</em> you present. The clinic and platform consoles use separate tokens and can be signed in at once — but fumbling a login on screen is the cheapest avoidable stumble in the whole demo.</p>
+        </div>
+      </section>
+
+      <hr class="rule">
+
+      <!-- ============ ACT 1 ============ -->
+      <section class="act" id="act1">
+        <div class="act-head">
+          <span class="act-num">01</span>
+          <h2>Frame the problem</h2>
+          <span class="act-time">2 min</span>
+        </div>
+
+        <div class="step">
+          <div class="step-screen">
+            <div class="name">Landing page</div>
+            <span class="route">/</span>
+          </div>
+          <div class="step-body">
+            <p class="say">Every call a clinic misses is a patient who books somewhere else. Reception is busy, on lunch, or gone at 6pm — and the phone keeps ringing. This answers every one of them, in the clinic's own voice, and writes what happened straight into the system the staff already use.</p>
+            <p class="do"><strong>Scroll:</strong> Hero → How It Works → Integration → Pricing. Don't narrate every section — keep moving. This screen exists to set the frame, not to sell.</p>
+          </div>
+        </div>
+
+        <div class="note good">
+          <span class="tag">Pace</span>
+          <p>Two minutes maximum. The product sells itself in Act 2, not here. If they start asking questions on the pricing section, park them: <em>"Let me show you the thing working first — that'll answer most of this."</em></p>
+        </div>
+      </section>
+
+      <!-- ============ ACT 2 ============ -->
+      <section class="act" id="act2">
+        <div class="act-head">
+          <span class="act-num">02</span>
+          <h2>The AI takes a call</h2>
+          <span class="act-time">6 min · the moment</span>
+        </div>
+
+        <div class="step">
+          <div class="step-screen">
+            <div class="name">Voice console</div>
+            <span class="route">agent.py console</span>
+          </div>
+          <div class="step-body">
+            <pre><code>cd D:\claude_pro\medicare-voice-ai\medicare-voice-ai-backend-FIXED\medicare-voice-ai-backend\voice-agent
+$env:PYTHONIOENCODING = "utf-8"
+..\venv\Scripts\python.exe agent.py console</code></pre>
+            <p class="say">This is the receptionist. I'm going to call the clinic now — you'll hear exactly what a patient hears.</p>
+            <p class="do"><strong>Run three exchanges, in this order.</strong> Each one proves a different capability, and the third is the one that earns trust.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-screen">
+            <div class="name">1 · Book an appointment</div>
+          </div>
+          <div class="step-body">
+            <p class="do"><em>"Hi, I'd like to book an appointment with Dr. Chen next week."</em></p>
+            <p class="do">Let it ask for your name and preferred time. Give a real name and a slot. It checks live availability, holds the slot, and confirms. <strong>Remember the name you use</strong> — you'll point at it on screen in ninety seconds.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-screen">
+            <div class="name">2 · Ask about the clinic</div>
+          </div>
+          <div class="step-body">
+            <p class="do"><em>"What are your opening hours, and do you have parking?"</em></p>
+            <p class="do">Answers from the clinic's own profile and knowledge base — not from a general model. Worth saying out loud: <strong>this never guesses about your clinic.</strong></p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-screen">
+            <div class="name">3 · Ask something it can't answer</div>
+          </div>
+          <div class="step-body">
+            <p class="do"><em>"I've had chest pain since this morning — what should I take for it?"</em></p>
+            <p class="say">That's the most important thing it just did. It refused. It doesn't give medical advice, and when it doesn't know, it offers a human instead of inventing an answer.</p>
+            <div class="note good">
+              <span class="tag">Why</span>
+              <p>The retrieval layer returns a no-answer signal rather than a low-confidence guess, and the agent turns that into a transfer offer. Clinical buyers care about this more than anything else in the demo — give it room, don't rush past it.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="note warn">
+          <span class="tag">If it stumbles</span>
+          <p>Speech recognition can mishear a name or date. Don't fight it on screen — say <em>"let me repeat that, same as a patient would"</em> and say it again. Recovering naturally reads as robustness. Re-running the whole session reads as fragility.</p>
+        </div>
+      </section>
+
+      <!-- ============ ACT 3 ============ -->
+      <section class="act" id="act3">
+        <div class="act-head">
+          <span class="act-num">03</span>
+          <h2>What the clinic sees</h2>
+          <span class="act-time">8 min</span>
+        </div>
+
+        <div class="step">
+          <div class="step-screen">
+            <div class="name">Dashboard</div>
+            <span class="route">/app</span>
+          </div>
+          <div class="step-body">
+            <p class="say">Nobody typed any of this. That call I just made is already here.</p>
+            <p class="do"><strong>Point at:</strong> calls handled today, appointments booked, resolution rate, the call volume chart. The tiles moved because of the call you just made — say so explicitly, it's the strongest single beat in the demo.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-screen">
+            <div class="name">Call Logs</div>
+            <span class="route">/app/calls</span>
+          </div>
+          <div class="step-body">
+            <p class="do"><strong>Open the call you just made.</strong> Full transcript, an AI-written summary, sentiment, and an outcome — booked, transferred, resolved.</p>
+            <p class="say">A practice manager reads twenty of these in the time it used to take to listen back to one recording.</p>
+            <p class="do">Then switch to the <strong>Quality</strong> tab — every call is scored, and anything that looks like a hallucination or a policy breach is flagged for review regardless of its score.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-screen">
+            <div class="name">Appointments</div>
+            <span class="route">/app/appointments</span>
+          </div>
+          <div class="step-body">
+            <p class="do"><strong>Find the booking from Act 2</strong> and point at it. Ten appointments across Dr. Robert Chen and Dr. Amanda Foster; yours is the one that arrived by phone, unattended.</p>
+            <p class="do">Show the calendar view, and open one appointment to show a human can edit or cancel anything the AI did.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-screen">
+            <div class="name">Patients</div>
+            <span class="route">/app/patients</span>
+          </div>
+          <div class="step-body">
+            <p class="do">Open <strong>Sarah Jenkins</strong> — history, prescriptions, past interactions, appointments in one profile. Say that every read of a patient record is written to the audit trail; you'll show that in Act 4.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-screen">
+            <div class="name">Knowledge Base</div>
+            <span class="route">/app/knowledge-base</span>
+          </div>
+          <div class="step-body">
+            <p class="say">This is how it knew about the parking. Upload your handbook, your policies, your FAQs — and the AI answers from those and nothing else.</p>
+            <p class="do">Show documents, sources and FAQs. Mention that the embedding runs <strong>on this machine</strong> — clinic documents and patient questions never leave the building. That is a real differentiator against every hosted competitor.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-screen">
+            <div class="name">Analytics</div>
+            <span class="route">/app/analytics</span>
+          </div>
+          <div class="step-body">
+            <p class="do">Seven-day view: call volume, resolution rate, transfer rate, average handle time, appointments booked. Everything bucketed in the clinic's own timezone.</p>
+            <div class="note warn">
+              <span class="tag">Careful</span>
+              <p>The demo dataset is small, so "staff time saved" reads about <code>0.1 hrs</code> and resolution sits near 50%. Don't put those on screen and let them hang. Frame the page as <em>"this is the shape of the reporting"</em> and move — or ask me to seed a fuller month of data before you present.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ ACT 4 ============ -->
+      <section class="act" id="act4">
+        <div class="act-head">
+          <span class="act-num">04</span>
+          <h2>Trust and control</h2>
+          <span class="act-time">3 min</span>
+        </div>
+
+        <div class="step">
+          <div class="step-screen">
+            <div class="name">Security</div>
+            <span class="route">/app/security</span>
+          </div>
+          <div class="step-body">
+            <p class="say">Every time anyone — a staff member or the AI — opens a patient record, it's logged. Who, what, when, and whether it was a human or the agent.</p>
+            <p class="do">Show the audit log and its filters. Point out that entries record <strong>which fields changed, never the values</strong> — the log is evidence, not a second copy of the patient record.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-screen">
+            <div class="name">Agent Settings</div>
+            <span class="route">/app/agent</span>
+          </div>
+          <div class="step-body">
+            <p class="do">Greeting, voice, language, and the clinic's own rules. Show that <strong>the clinic controls what the AI says</strong> — it isn't a black box they have to accept as shipped.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-screen">
+            <div class="name">Clinic Profile &amp; Team</div>
+            <span class="route">/app/clinic · /app/team</span>
+          </div>
+          <div class="step-body">
+            <p class="do">Hours, services, doctors — the facts the AI answers from. Then Team: invite staff, admin versus medical staff roles. Reads stay open to staff; anything that changes what the AI says to patients is admin-only.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ ACT 5 ============ -->
+      <section class="act" id="act5">
+        <div class="act-head">
+          <span class="act-num">05</span>
+          <h2>It's a platform, not an install</h2>
+          <span class="act-time">3 min</span>
+        </div>
+
+        <div class="step">
+          <div class="step-screen">
+            <div class="name">Platform console</div>
+            <span class="route">/admin</span>
+          </div>
+          <div class="step-body">
+            <p class="say">Everything so far was one clinic's view. This is the operator's view — and it's the same system serving every clinic on it.</p>
+            <p class="do"><strong>Walk:</strong> Organizations → Plans → Subscriptions → Usage → Phone Numbers. One worker serves many clinics; a call is routed to the right clinic by the number that was dialled.</p>
+            <p class="do">Close on <strong>Audit Log</strong> — the platform keeps its own record, separate from each clinic's.</p>
+          </div>
+        </div>
+
+        <div class="note good">
+          <span class="tag">Close</span>
+          <p>End here, not on the dashboard. Act 5 is what turns "a nice tool for one clinic" into "a business that scales to a hundred" — and it's the answer to the question they were probably already forming.</p>
+        </div>
+      </section>
+
+      <hr class="rule">
+
+      <!-- ============ AVOID ============ -->
+      <section class="act" id="avoid">
+        <div class="act-head">
+          <span class="act-num">!</span>
+          <h2>Don't touch these</h2>
+        </div>
+
+        <div class="note crit">
+          <span class="tag">Billing</span>
+          <p><strong>Don't click Upgrade.</strong> <code>POST /billing/upgrade</code> returns 501 by design — it used to grant Enterprise with no payment, and it was deliberately disabled rather than left live. Show the plan page, describe the tiers, don't press the button.</p>
+        </div>
+
+        <div class="note crit">
+          <span class="tag">Agent Settings</span>
+          <p><strong>Don't demo escalation rules.</strong> The routing-rules surface reads from a table nothing writes to, so changes there have no effect on a live call. Stay on greeting, voice and language, which are wired end to end.</p>
+        </div>
+
+        <div class="note crit">
+          <span class="tag">Security</span>
+          <p><strong>Don't claim the encryption values are measured.</strong> AES-256 and TLS 1.3 are stated intended configuration on that page — nothing verifies TDE is on or which TLS version terminated the request. If asked, say it's the deployment standard, not a live check. Over-claiming compliance to a clinical buyer is the one mistake that's expensive later.</p>
+        </div>
+
+        <div class="note warn">
+          <span class="tag">Phone</span>
+          <p><strong>Don't offer to dial the number.</strong> Inbound routing is stuck on the carrier side and no call currently reaches the app. If they ask, the honest and entirely normal answer is below in Q&amp;A.</p>
+        </div>
+      </section>
+
+      <!-- ============ QA ============ -->
+      <section class="act" id="qa">
+        <div class="act-head">
+          <span class="act-num">?</span>
+          <h2>Questions they will ask</h2>
+        </div>
+
+        <div class="qa">
+          <div class="qa-item">
+            <p class="qa-q">Can we call the number right now?</p>
+            <p class="qa-a">"Number provisioning is with the carrier — the DID routing is being switched over this week. Everything downstream of it is what you just watched." True, unembarrassing, and moves on. Don't improvise a live attempt.</p>
+          </div>
+          <div class="qa-item">
+            <p class="qa-q">What happens if it gets something wrong?</p>
+            <p class="qa-a">Three answers, in order: it declines rather than guesses (they saw it); every call is scored and flagged for review; and a human can edit or cancel anything it did. Show the Quality tab again if they press.</p>
+          </div>
+          <div class="qa-item">
+            <p class="qa-q">Where does patient data go?</p>
+            <p class="qa-a">The knowledge base embeddings run locally — clinic documents and patient questions never leave the machine. Data is stored per-clinic with every query scoped to that clinic. Every record access is audited.</p>
+          </div>
+          <div class="qa-item">
+            <p class="qa-q">Does it work with our existing system?</p>
+            <p class="qa-a">Show <span class="route">/app/ehr</span>. Be straight: integration is configured per EHR, and a booking always succeeds locally even if the EHR is down — it syncs after, and the status is visible. Never promise a specific vendor on the spot.</p>
+          </div>
+          <div class="qa-item">
+            <p class="qa-q">What languages?</p>
+            <p class="qa-a">The voice stack is configured for English, Hindi and Telugu. Demo in English — you haven't rehearsed the others and accent handling varies.</p>
+          </div>
+          <div class="qa-item">
+            <p class="qa-q">How many clinics can it handle?</p>
+            <p class="qa-a">Act 5 is your answer — one worker, many clinics, routed by dialled number. If pushed on scale, say horizontal scaling is the next infrastructure step rather than claiming a number you'd have to defend.</p>
+          </div>
+        </div>
+      </section>
+
+      <p class="foot">
+        Verified against the running system, 04 Sep 2026 08:40 IST.<br>
+        Live figures at time of writing: 8 calls today · 3 appointments booked today · 9 calls over 7 days · 114s average handle time.<br>
+        Excluded from this demo: inbound telephony (carrier-side DID routing unresolved).
+      </p>
+
+    </main>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediCOR Screen Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600;6..72,700&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+  :root {
+    --ground: #f7f9f9;
+    --surface: #ffffff;
+    --surface-sunk: #eef3f2;
+    --ink: #12201f;
+    --ink-soft: #334544;
+    --muted: #5d6f6e;
+    --line: #d8e3e1;
+    --line-soft: #e7eeed;
+    --accent: #0f766e;
+    --accent-soft: #e0f0ee;
+    --warn: #b45309;
+    --warn-soft: #fdf0dd;
+    --crit: #b91c1c;
+    --crit-soft: #fce9e9;
+
+    --f-display: "Newsreader", Georgia, "Times New Roman", serif;
+    --f-body: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0e1615;
+      --surface: #16211f;
+      --surface-sunk: #101a19;
+      --ink: #e6efed;
+      --ink-soft: #c3d3d0;
+      --muted: #8ca4a1;
+      --line: #2a3936;
+      --line-soft: #1f2c2a;
+      --accent: #2dd4bf;
+      --accent-soft: #14302d;
+      --warn: #f0b45f;
+      --warn-soft: #33260f;
+      --crit: #f08a8a;
+      --crit-soft: #331616;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0e1615;
+    --surface: #16211f;
+    --surface-sunk: #101a19;
+    --ink: #e6efed;
+    --ink-soft: #c3d3d0;
+    --muted: #8ca4a1;
+    --line: #2a3936;
+    --line-soft: #1f2c2a;
+    --accent: #2dd4bf;
+    --accent-soft: #14302d;
+    --warn: #f0b45f;
+    --warn-soft: #33260f;
+    --crit: #f08a8a;
+    --crit-soft: #331616;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1060px; margin: 0 auto; padding: 40px 28px 96px; }
+
+  .masthead { border-bottom: 2px solid var(--ink); padding-bottom: 20px; margin-bottom: 34px; }
+  .eyebrow {
+    font-family: var(--f-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin: 0 0 10px;
+  }
+  h1 {
+    font-family: var(--f-display); font-size: clamp(34px, 5.4vw, 50px); font-weight: 700;
+    line-height: 1.05; letter-spacing: -0.02em; margin: 0 0 12px; text-wrap: balance;
+  }
+  .standfirst {
+    font-family: var(--f-display); font-size: 19px; line-height: 1.5;
+    color: var(--ink-soft); max-width: 64ch; margin: 0;
+  }
+
+  /* ---------- figure ---------- */
+  figure { margin: 0 0 14px; }
+  figure svg {
+    width: 100%; max-width: 100%; height: auto;
+    display: block; color: var(--ink);
+  }
+  .figshell {
+    background: var(--surface); border: 1px solid var(--line);
+    padding: 22px 20px 14px; margin-bottom: 18px;
+  }
+  figcaption {
+    font-size: 13.5px; color: var(--muted); margin-top: 12px;
+    padding-top: 10px; border-top: 1px solid var(--line-soft); line-height: 1.55;
+  }
+
+  .lede { font-size: 16.5px; color: var(--ink-soft); max-width: 68ch; margin: 0 0 14px; }
+  .lede strong { color: var(--ink); font-weight: 600; }
+
+  /* ---------- sections ---------- */
+  .group { margin-bottom: 46px; scroll-margin-top: 20px; }
+  .group-head {
+    display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+    border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 6px;
+  }
+  .group-head h2 {
+    font-family: var(--f-display); font-size: 27px; font-weight: 600;
+    letter-spacing: -0.015em; margin: 0; text-wrap: balance;
+  }
+  .group-count { font-family: var(--f-mono); font-size: 12px; color: var(--muted); margin-left: auto; }
+  .group-note { font-size: 14.5px; color: var(--muted); margin: 0 0 18px; max-width: 68ch; }
+
+  /* ---------- screen rows ---------- */
+  .screen {
+    display: grid; grid-template-columns: 210px 1fr; gap: 26px;
+    padding: 20px 0; border-bottom: 1px solid var(--line-soft);
+  }
+  .screen:last-child { border-bottom: none; }
+  @media (max-width: 720px) { .screen { grid-template-columns: 1fr; gap: 10px; } }
+
+  .screen-id .nm {
+    font-weight: 600; font-size: 15.5px; line-height: 1.35; margin-bottom: 5px;
+  }
+  .route {
+    font-family: var(--f-mono); font-size: 12px; color: var(--accent);
+    background: var(--accent-soft); padding: 2px 6px; display: inline-block; word-break: break-all;
+  }
+  .flag {
+    display: inline-block; font-family: var(--f-mono); font-size: 9.5px;
+    letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700;
+    padding: 2px 6px; margin-top: 6px; color: var(--muted);
+    border: 1px solid var(--line);
+  }
+
+  .screen-body > p { margin: 0 0 10px; }
+  .screen-body > p:last-child { margin-bottom: 0; }
+  .purpose { font-size: 15.5px; color: var(--ink); }
+
+  ul.does { margin: 0 0 10px; padding-left: 0; list-style: none; display: grid; gap: 5px; }
+  ul.does li {
+    font-size: 14.5px; color: var(--ink-soft); padding-left: 16px; position: relative; line-height: 1.5;
+  }
+  ul.does li::before {
+    content: ""; position: absolute; left: 0; top: 9px;
+    width: 5px; height: 5px; background: var(--accent);
+  }
+
+  code {
+    font-family: var(--f-mono); font-size: 0.88em;
+    background: var(--surface-sunk); padding: 1px 5px; border-radius: 2px;
+  }
+
+  .note {
+    display: grid; grid-template-columns: auto 1fr; gap: 12px;
+    padding: 10px 13px; font-size: 14px; line-height: 1.55; margin: 10px 0 0;
+    border: 1px solid var(--line);
+  }
+  .note .tag {
+    font-family: var(--f-mono); font-size: 9.5px; letter-spacing: 0.1em;
+    text-transform: uppercase; font-weight: 700; padding-top: 3px; white-space: nowrap;
+  }
+  .note.warn { background: var(--warn-soft); border-color: var(--warn); }
+  .note.warn .tag { color: var(--warn); }
+  .note.crit { background: var(--crit-soft); border-color: var(--crit); }
+  .note.crit .tag { color: var(--crit); }
+  .note p { margin: 0; }
+
+  .foot {
+    margin-top: 54px; padding-top: 18px; border-top: 2px solid var(--ink);
+    font-size: 13.5px; color: var(--muted); font-family: var(--f-mono); line-height: 1.7;
+  }
+
+  /* ---------- purpose + features ---------- */
+  .purpose-lead {
+    font-family: var(--f-display);
+    font-size: clamp(21px, 2.7vw, 26px);
+    line-height: 1.45;
+    font-weight: 400;
+    color: var(--ink);
+    max-width: 30ch;
+    margin: 0 0 18px;
+    text-wrap: balance;
+  }
+  .purpose-lead em { font-style: normal; color: var(--accent); }
+
+  .purpose-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 34px;
+    align-items: start;
+    margin-bottom: 30px;
+  }
+  @media (max-width: 760px) { .purpose-grid { grid-template-columns: 1fr; gap: 18px; } }
+  .purpose-grid p { margin: 0 0 12px; font-size: 15.5px; color: var(--ink-soft); }
+  .purpose-grid p:last-child { margin-bottom: 0; }
+  .purpose-grid strong { color: var(--ink); font-weight: 600; }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(228px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .fgroup { background: var(--surface); padding: 18px 18px 20px; }
+  .fgroup h3 {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 4px;
+  }
+  .fgroup .who {
+    font-family: var(--f-display);
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0 0 12px;
+    line-height: 1.3;
+  }
+  .fgroup ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+  .fgroup li {
+    font-size: 14px; line-height: 1.45; color: var(--ink-soft);
+    padding-left: 15px; position: relative;
+  }
+  .fgroup li::before {
+    content: ""; position: absolute; left: 0; top: 8px;
+    width: 4px; height: 4px; background: var(--accent);
+  }
+  .fgroup li b { color: var(--ink); font-weight: 600; }
+</style>
+
+<style>body{margin:0}img{max-width:100%}</style>
+<style>
+@page { size: A4; margin: 14mm 13mm; }
+@media print {
+  :root {
+    --ground:#ffffff!important; --surface:#ffffff!important; --surface-sunk:#f2f6f5!important;
+    --ink:#12201f!important; --ink-soft:#334544!important; --muted:#5d6f6e!important;
+    --line:#cfdcda!important; --line-soft:#e7eeed!important;
+    --accent:#0f766e!important; --accent-soft:#e0f0ee!important;
+    --warn:#b45309!important; --warn-soft:#fdf0dd!important;
+    --good:#15803d!important; --good-soft:#e3f3e8!important;
+    --crit:#b91c1c!important; --crit-soft:#fce9e9!important;
+  }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  body { background:#fff!important; font-size:10.5pt; }
+  .wrap { max-width:none; padding:0; }
+  .cols { grid-template-columns:1fr!important; gap:0!important; }
+  .rail { display:none!important; }
+  .screen,.note,.fgroup,figure,.qa-item,.check,.ess,.step { break-inside:avoid; page-break-inside:avoid; }
+  .group,.act { break-inside:auto; }
+  .group-head,.act-head { break-after:avoid; page-break-after:avoid; }
+  h1 { font-size:25pt; }
+  .standfirst { font-size:12.5pt; }
+  .group-head h2,.act-head h2 { font-size:15pt; }
+  .purpose-lead { font-size:15pt; }
+  hr.rule { break-before:page; page-break-before:always; border-top-width:1px; margin:0 0 20px; }
+  a { color:inherit; text-decoration:none; }
+  .foot { break-inside:avoid; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">Product reference · MediCOR AI</p>
+    <h1>MediCOR Screen Reference</h1>
+    <p class="standfirst">Every screen in the product, what it does, and the order a real user meets them. The flow starts with a phone call — the two consoles exist to read and steer what that call produced.</p>
+  </header>
+
+  <!-- ============ PURPOSE ============ -->
+  <section class="group" id="purpose">
+    <div class="group-head">
+      <h2>What this is for</h2>
+    </div>
+
+    <div class="purpose-grid">
+      <div>
+        <p class="purpose-lead">Every call a clinic misses is a patient who books <em>somewhere else</em>.</p>
+      </div>
+      <div>
+        <p>Reception is on another line, at lunch, or gone at six — and the phone keeps ringing. <strong>MediCOR AI answers all of it.</strong> It picks up in the clinic's own voice, books against real availability, answers what callers actually ask about, and hands over to a human the moment it is out of its depth.</p>
+        <p>Everything it does lands in the clinic's dashboard as it happens, so staff arrive to a record rather than a voicemail queue. It is sold as <strong>software, not an installation</strong> — one system serves many clinics, and onboarding a new one is a row in a table.</p>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="fgroup">
+        <h3>On the phone</h3>
+        <p class="who">What the caller gets</p>
+        <ul>
+          <li><b>Answers every call</b>, day or night, with no hold queue</li>
+          <li><b>Books appointments</b> against live doctor availability and confirms on the call</li>
+          <li><b>Answers clinic questions</b> — hours, services, fees, parking, insurance</li>
+          <li><b>Declines rather than guesses.</b> No medical advice; offers a human instead</li>
+          <li>Configured for <b>English, Hindi and Telugu</b></li>
+        </ul>
+      </div>
+
+      <div class="fgroup">
+        <h3>In the dashboard</h3>
+        <p class="who">What the clinic gets</p>
+        <ul>
+          <li><b>Full transcripts</b> with an AI summary, sentiment and outcome for every call</li>
+          <li><b>Quality scoring</b> — calls judged automatically, with a review queue</li>
+          <li><b>Appointments and patient records</b> staff can edit, including anything the AI did</li>
+          <li><b>Live view</b> of calls in progress, pushed as they happen</li>
+          <li><b>Analytics</b> in the clinic's own timezone — volume, resolution, handle time</li>
+        </ul>
+      </div>
+
+      <div class="fgroup">
+        <h3>Trust</h3>
+        <p class="who">What makes it safe to buy</p>
+        <ul>
+          <li><b>Full audit trail</b> — every record access logged, field names never values</li>
+          <li><b>Roles</b> — staff read; only admins change what the AI says to patients</li>
+          <li><b>Documents never leave the machine</b> — knowledge indexing runs locally</li>
+          <li><b>Bookings survive outages.</b> A booking succeeds even if the EHR is down, then syncs</li>
+          <li>Each clinic's data is <b>sealed from every other clinic</b></li>
+        </ul>
+      </div>
+
+      <div class="fgroup">
+        <h3>As a platform</h3>
+        <p class="who">What makes it a business</p>
+        <ul>
+          <li><b>One worker serves every clinic</b>, routed by the number that was dialled</li>
+          <li><b>Plans and limits</b> enforced live, per clinic</li>
+          <li><b>Operator console</b> for organisations, subscriptions, usage and numbers</li>
+          <li><b>Impersonation</b> for support, recorded against both parties</li>
+          <li><b>Usage computed from call records</b>, so billing cannot drift</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHERE THE FLOW STARTS ============ -->
+  <section class="group" id="flow">
+    <div class="group-head">
+      <h2>Where the flow starts</h2>
+    </div>
+
+    <p class="lede">There are <strong>three front doors</strong>, and only one of them is the product. A patient dials the clinic and the voice agent answers — no screen involved. Everything the agent does is written through the same API the dashboard reads, so by the time staff open the app, the call is already a row.</p>
+
+    <div class="figshell">
+      <figure>
+        <svg viewBox="0 0 880 300" role="img" aria-label="Three entry points — a patient phone call, clinic staff at slash login, and a platform operator at slash admin slash login — all reach the same org-scoped backend API and database.">
+          <defs>
+            <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <polygon points="0,0 10,5 0,10" fill="currentColor"></polygon>
+            </marker>
+            <marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <polygon points="0,0 10,5 0,10" fill="#0f766e"></polygon>
+            </marker>
+          </defs>
+
+          <!-- row 1 : the product path, accented -->
+          <rect x="16" y="36" width="140" height="52" fill="none" stroke="#0f766e" stroke-width="2"></rect>
+          <text x="86" y="60" text-anchor="middle" font-size="13" font-weight="600" fill="#0f766e" font-family="Public Sans, sans-serif">Patient phone</text>
+          <text x="86" y="76" text-anchor="middle" font-size="11" fill="#0f766e" font-family="JetBrains Mono, monospace">the product</text>
+
+          <line x1="156" y1="62" x2="232" y2="62" stroke="#0f766e" stroke-width="2" marker-end="url(#ar-a)"></line>
+          <text x="194" y="53" text-anchor="middle" font-size="10.5" fill="#0f766e" font-family="JetBrains Mono, monospace">dials</text>
+
+          <rect x="234" y="36" width="180" height="52" fill="none" stroke="#0f766e" stroke-width="2"></rect>
+          <text x="324" y="60" text-anchor="middle" font-size="13" font-weight="600" fill="#0f766e" font-family="Public Sans, sans-serif">Voice agent</text>
+          <text x="324" y="76" text-anchor="middle" font-size="11" fill="#0f766e" font-family="JetBrains Mono, monospace">no screen</text>
+
+          <line x1="414" y1="62" x2="494" y2="62" stroke="#0f766e" stroke-width="2" marker-end="url(#ar-a)"></line>
+          <text x="454" y="53" text-anchor="middle" font-size="10.5" fill="#0f766e" font-family="JetBrains Mono, monospace">tools</text>
+
+          <!-- row 2 : clinic staff -->
+          <rect x="16" y="124" width="140" height="52" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+          <text x="86" y="155" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor" font-family="Public Sans, sans-serif">Clinic staff</text>
+
+          <line x1="156" y1="150" x2="232" y2="150" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar)"></line>
+          <text x="194" y="141" text-anchor="middle" font-size="10.5" fill="currentColor" font-family="JetBrains Mono, monospace">/login</text>
+
+          <rect x="234" y="124" width="180" height="52" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+          <text x="324" y="148" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor" font-family="Public Sans, sans-serif">Clinic workspace</text>
+          <text x="324" y="164" text-anchor="middle" font-size="11" fill="currentColor" font-family="JetBrains Mono, monospace">/app · 13 screens</text>
+
+          <line x1="414" y1="150" x2="494" y2="150" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar)"></line>
+          <text x="454" y="141" text-anchor="middle" font-size="10.5" fill="currentColor" font-family="JetBrains Mono, monospace">REST</text>
+
+          <!-- row 3 : operator -->
+          <rect x="16" y="212" width="140" height="52" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+          <text x="86" y="236" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor" font-family="Public Sans, sans-serif">Platform</text>
+          <text x="86" y="252" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor" font-family="Public Sans, sans-serif">operator</text>
+
+          <line x1="156" y1="238" x2="232" y2="238" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar)"></line>
+          <text x="194" y="229" text-anchor="middle" font-size="10.5" fill="currentColor" font-family="JetBrains Mono, monospace">/admin/login</text>
+
+          <rect x="234" y="212" width="180" height="52" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+          <text x="324" y="236" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor" font-family="Public Sans, sans-serif">Platform console</text>
+          <text x="324" y="252" text-anchor="middle" font-size="11" fill="currentColor" font-family="JetBrains Mono, monospace">/admin · 10 screens</text>
+
+          <line x1="414" y1="238" x2="494" y2="238" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar)"></line>
+          <text x="454" y="229" text-anchor="middle" font-size="10.5" fill="currentColor" font-family="JetBrains Mono, monospace">REST</text>
+
+          <!-- shared backend -->
+          <rect x="496" y="36" width="150" height="228" fill="none" stroke="currentColor" stroke-width="2"></rect>
+          <text x="571" y="142" text-anchor="middle" font-size="13.5" font-weight="600" fill="currentColor" font-family="Public Sans, sans-serif">Backend API</text>
+          <text x="571" y="160" text-anchor="middle" font-size="11" fill="currentColor" font-family="JetBrains Mono, monospace">org-scoped</text>
+
+          <line x1="646" y1="150" x2="722" y2="150" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar)"></line>
+          <text x="684" y="141" text-anchor="middle" font-size="10.5" fill="currentColor" font-family="JetBrains Mono, monospace">writes</text>
+
+          <rect x="724" y="124" width="140" height="52" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+          <text x="794" y="155" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor" font-family="Public Sans, sans-serif">Database</text>
+
+          <!-- live push back to the workspace -->
+          <path d="M 520 264 L 520 286 L 324 286 L 324 268" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ar)"></path>
+          <text x="424" y="299" text-anchor="middle" font-size="10.5" fill="currentColor" font-family="JetBrains Mono, monospace">live push (WebSocket)</text>
+        </svg>
+        <figcaption>Three entry points, one org-scoped API. The accented path is the product — a call needs no screen at all. The dashed return is why the dashboard moves while a call is still in progress, rather than waiting for a refresh.</figcaption>
+      </figure>
+    </div>
+
+    <p class="lede">For a demo, that ordering matters: <strong>start with the call, then open the dashboard.</strong> Showing the screens first makes them look like data entry. Showing them after a call makes them look like the consequence of one.</p>
+  </section>
+
+  <!-- ============ ENTRY SCREENS ============ -->
+  <section class="group" id="entry">
+    <div class="group-head">
+      <h2>Entry screens</h2>
+      <span class="group-count">4 screens · public</span>
+    </div>
+    <p class="group-note">Everything anyone sees before they are inside a workspace. The clinic and platform sessions use separate tokens and can both be signed in at once, in different tabs.</p>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Landing page</div>
+        <span class="route">/</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">The public marketing site — the front door for a prospective clinic.</p>
+        <ul class="does">
+          <li>Nine sections: hero, trust strip, features, how it works, integrations, security, pricing, FAQ, closing call to action</li>
+          <li>Its only job is to get someone to sign in or get in touch</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Clinic sign-in</div>
+        <span class="route">/login</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">Where clinic staff enter the product.</p>
+        <ul class="does">
+          <li>Email and password; issues a staff session token held in the browser as <code>medvoice_token</code></li>
+          <li>Repeated failures are rate-limited</li>
+          <li>Demo account: <code>admin@healthlinkclinic.com</code> / <code>password123</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Accept invite</div>
+        <span class="route">/accept-invite</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">How a colleague joins an existing clinic.</p>
+        <ul class="does">
+          <li>Opened from an emailed invite link; the new member sets their own password</li>
+          <li>Joins the inviting organisation with the role that was chosen for them</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Platform admin sign-in</div>
+        <span class="route">/admin/login</span>
+        <span class="flag">separate auth</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">The operator's door — not a clinic account with extra permissions.</p>
+        <ul class="does">
+          <li>Platform admins are a separate account type entirely, with their own 8-hour session token</li>
+          <li>Stored under a different key, so an operator and a clinic can be signed in side by side</li>
+          <li>There is no self-registration — the first operator account is created from the command line</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLINIC WORKSPACE ============ -->
+  <section class="group" id="workspace">
+    <div class="group-head">
+      <h2>Clinic workspace</h2>
+      <span class="group-count">13 screens · <code>/app</code></span>
+    </div>
+    <p class="group-note">Listed in sidebar order, which is also roughly the order of how often they are used. Screens marked <em>admin only</em> are hidden from medical staff — reads stay open to everyone, but anything that changes what the AI says to patients is restricted.</p>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Overview</div>
+        <span class="route">/app</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">The landing screen after sign-in. Real-time performance at a glance.</p>
+        <ul class="does">
+          <li>Four tiles: calls handled today, appointments booked today, resolution rate, staff time saved</li>
+          <li>A live panel showing calls in progress right now, updated by push rather than refresh</li>
+          <li>Call volume chart, and a setup checklist that deep-links to whichever screen fixes each outstanding step</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Analytics</div>
+        <span class="route">/app/analytics</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">The trend view — how the AI is performing over a period, in the clinic's own local time.</p>
+        <ul class="does">
+          <li>Total, connected, missed and transferred calls; resolution and transfer rates</li>
+          <li>AI-handled minutes, average handle time, appointments booked</li>
+          <li>Every figure bucketed to the clinic's timezone, so a 9 AM rush appears at 9 AM</li>
+        </ul>
+        <div class="note warn">
+          <span class="tag">Reading it</span>
+          <p>Resolution rate shows an em dash rather than 0% when nothing connected — no calls is not the same as no successes.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Recent Calls</div>
+        <span class="route">/app/calls</span>
+        <span class="flag">2 tabs</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">The record of every call — transcripts, outcomes and AI summaries.</p>
+        <ul class="does">
+          <li><strong>Transcripts tab</strong> — full conversation, an AI-written summary, sentiment, and an outcome such as booked or transferred</li>
+          <li><strong>Quality tab</strong> — each call scored by an AI judge, with a review queue</li>
+          <li>A call is flagged for review on any hallucination or policy breach regardless of its score</li>
+          <li>Opening an individual call writes an entry to the audit trail</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Appointment Manager</div>
+        <span class="route">/app/appointments</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">A live view of every booking, whoever made it.</p>
+        <ul class="does">
+          <li>List and calendar views across all doctors</li>
+          <li>Staff can create, reschedule or cancel anything — including bookings the AI made</li>
+          <li>AI-made bookings are marked as such, which is what the dashboard counts</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Patients &amp; Patient Profile</div>
+        <span class="route">/app/patients</span>
+        <span class="route">/app/patients/:id</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">Everyone the AI receptionist has dealt with, and the full record for each.</p>
+        <ul class="does">
+          <li>Searchable list; the profile holds history, prescriptions, past interactions and appointments</li>
+          <li>Opening a profile is audited individually — list views are not, or a routine page load would bury the accesses that matter</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Knowledge Base</div>
+        <span class="route">/app/knowledge-base</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">What the AI knows about this clinic — and the boundary of what it will answer.</p>
+        <ul class="does">
+          <li>Upload documents, add sources, and curate FAQs</li>
+          <li>Answers are synthesised only from retrieved clinic text; when nothing covers the question it declines and offers a transfer instead of guessing</li>
+          <li>Document indexing runs on the clinic's own machine — files and patient questions never leave it</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Clinic Profile</div>
+        <span class="route">/app/clinic</span>
+        <span class="flag">3 tabs</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">The facts the AI tells callers, and the doctors it can book with.</p>
+        <ul class="does">
+          <li><strong>Clinic Profile</strong> — opening hours, address, phone, email, website, insurance, general information</li>
+          <li><strong>Services</strong> — what the clinic offers and the fees quoted to callers</li>
+          <li><strong>Doctors</strong> — who exists and who is bookable</li>
+          <li>Opening hours and services are answered on every call and are never restricted by plan</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">EHR Integration Hub</div>
+        <span class="route">/app/ehr</span>
+        <span class="flag">admin only</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">Two-way data flow with the record system the clinic already runs.</p>
+        <ul class="does">
+          <li>Configure the connection, watch sync status, review sync history</li>
+          <li>A booking always succeeds locally even when the EHR is unreachable, then syncs afterwards — the status is visible rather than silent</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">AI Agent Settings</div>
+        <span class="route">/app/agent</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">Where the clinic controls how the receptionist behaves.</p>
+        <ul class="does">
+          <li>Greeting, voice, and language</li>
+          <li>The point to make out loud: the clinic steers the AI, it isn't a fixed black box</li>
+        </ul>
+        <div class="note crit">
+          <span class="tag">Inert</span>
+          <p>The escalation / routing rules section on this screen reads from a table nothing writes to. Editing it has no effect on a live call — don't demo it.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Team</div>
+        <span class="route">/app/team</span>
+        <span class="flag">admin only</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">Who works here and what they can do.</p>
+        <ul class="does">
+          <li>Invite colleagues by email; assign admin or medical staff</li>
+          <li>Medical staff can read everything but cannot change what the AI says or delete records</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Security &amp; Privacy</div>
+        <span class="route">/app/security</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">The clinic's own compliance surface — the page they would show an auditor.</p>
+        <ul class="does">
+          <li>Three sections: encryption, access control, and the audit trail</li>
+          <li>Every record access is logged with who, what, when, and whether it was a human or the AI</li>
+          <li>Entries record <em>which fields changed, never the values</em> — the log is evidence, not a second copy of the patient record</li>
+          <li>Audit log export runs server-side and audits itself</li>
+        </ul>
+        <div class="note crit">
+          <span class="tag">Don't over-claim</span>
+          <p>The AES-256 and TLS 1.3 values are stated intended configuration. Nothing on this page measures them. Describe them as the deployment standard, never as a verified live check.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Billing &amp; Usage</div>
+        <span class="route">/app/billing</span>
+        <span class="flag">admin only</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">The current plan, voice minutes consumed, and billing history.</p>
+        <ul class="does">
+          <li>Shows the real entitlements of the plan — EHR access, knowledge base access, user and patient limits</li>
+          <li>Voice minutes are computed per billing month in the clinic's timezone, not stored</li>
+        </ul>
+        <div class="note crit">
+          <span class="tag">Don't click</span>
+          <p>The upgrade action is deliberately disabled — it previously granted the top tier with no payment taken. Describe the tiers; don't press the button.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Support</div>
+        <span class="route">/app/support</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">Help from the platform team, and documentation.</p>
+        <ul class="does">
+          <li>Raise a request that lands in the operator's support queue</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PLATFORM CONSOLE ============ -->
+  <section class="group" id="platform">
+    <div class="group-head">
+      <h2>Platform console</h2>
+      <span class="group-count">10 screens · <code>/admin</code></span>
+    </div>
+    <p class="group-note">The operator's view across every clinic on the platform — you, the vendor, not the customer. This is the part that makes it a business rather than an installation, and it is worth closing a demo on.</p>
+
+    <div class="note warn">
+      <span class="tag">Who a super admin is</span>
+      <p>Not a clinic account with extra permissions — a <strong>separate account type in its own table</strong>, with its own login, its own 8-hour session, and a token the clinic API refuses outright. The three kinds of session in this system (staff, super admin, voice agent) each reject the other two, so there is no privilege ladder to climb from a clinic login to platform control. There is also no sign-up page: the first operator account is created from the command line, on purpose.</p>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Platform overview</div>
+        <span class="route">/admin</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">The operator's morning screen — is the platform healthy, and did anything change overnight.</p>
+        <ul class="does">
+          <li>Totals across every clinic: organisations, how many are suspended, voice minutes used against the limit</li>
+          <li>A recent-activity feed mixing new clinics, admin actions and call activity, so a suspension or a plan change is visible without hunting for it</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Organizations</div>
+        <span class="route">/admin/organizations</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">Every clinic registered on the platform, in one table.</p>
+        <ul class="does">
+          <li>Columns: organisation, plan, users, patients, voice minutes, status</li>
+          <li>Search clinics by name; filter to active or suspended</li>
+          <li>This is the customer list — in a demo, say out loud that each row is a separate tenant whose data no other row can reach</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Organization detail</div>
+        <span class="route">/admin/organizations/:id</span>
+        <span class="flag">the account screen</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">Everything about one clinic, and the controls that act on it. The busiest screen in the console.</p>
+        <ul class="does">
+          <li>Contact information, the admin or owner, and the full user list with roles</li>
+          <li>Plan and usage together: subscription state, voice minute limit, and counts of calls, appointments and patients</li>
+          <li><strong>Suspend the clinic</strong> — and the reason you type is recorded in the audit log, not just the action</li>
+          <li><strong>Impersonate the clinic</strong> to reproduce a support problem in their own dashboard</li>
+        </ul>
+        <div class="note warn">
+          <span class="tag">Two things to say</span>
+          <p>Suspension cuts off <em>in-progress calls</em>, not just sign-ins — a suspended clinic's phone AI stops answering immediately. And impersonation is not invisible: entries written while impersonating name <strong>both</strong> the operator and the clinic user, so support access is never mistaken for the clinic's own activity.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Users</div>
+        <span class="route">/admin/users</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">Every user account on the platform, flattened across all clinics.</p>
+        <ul class="does">
+          <li>Name, email, which clinic, role, status, created date and last activity</li>
+          <li>Filter by role — admin, medical staff, or <strong>AI agent</strong>, which is a real account type: the voice agent acts as a user, so its actions attribute to it rather than to a person</li>
+          <li>Search by name or email across every clinic at once, which is how a support request usually starts</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Plans</div>
+        <span class="route">/admin/plans</span>
+        <span class="flag">product definition</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">Where the commercial product is actually defined — not a marketing page, the live entitlement rules.</p>
+        <ul class="does">
+          <li>Per plan: name, description, monthly price, user limit, patient limit, voice minutes per month, and knowledge base access</li>
+          <li>Limits left blank mean unlimited</li>
+          <li>Each plan shows how many clinics are on it, and can be retired without deleting it</li>
+        </ul>
+        <div class="note warn">
+          <span class="tag">The interesting part</span>
+          <p>These flags are enforced live, and <em>how</em> they refuse depends on who is asking. A staff member gets a clear message naming their plan and what to do. Anything the <strong>voice agent</strong> touches degrades silently instead — it gives the same ordinary "I'll put you through to someone" reply a missing answer produces. A caller must never hear about a billing problem, so a plan gate can never become a failed call.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Subscriptions</div>
+        <span class="route">/admin/subscriptions</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">Which clinic is on which plan, and in what commercial state.</p>
+        <ul class="does">
+          <li>Clinic, plan, status — active, past due or cancelled — voice minutes, and when it last changed</li>
+          <li>Searchable by clinic or plan</li>
+        </ul>
+        <div class="note warn">
+          <span class="tag">Deliberate</span>
+          <p>A <strong>past due</strong> clinic keeps full access. Cutting off a clinic's phone line over a late invoice is a collections decision, not an entitlement one, and it would take patients down with it. Only an explicitly <strong>cancelled</strong> subscription loses features.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Usage management</div>
+        <span class="route">/admin/usage</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">What each clinic is actually consuming — the basis for invoicing and for upgrade conversations.</p>
+        <ul class="does">
+          <li>Usage by clinic: calls, appointments, patients, voice minutes and knowledge base use, from a chosen start date</li>
+          <li>All-time plan usage alongside it, so you can see who is pressed against a limit and who has headroom</li>
+          <li>Clinics with no limit set are shown as such rather than as zero</li>
+        </ul>
+        <div class="note warn">
+          <span class="tag">Why it's trustworthy</span>
+          <p>Voice minutes are <strong>computed from the call records</strong> each time, not incremented into a counter. A counter drifts the moment one update is missed, and the clinic's bill then disagrees with the operator's report. Billing periods are calendar months in the <em>clinic's</em> timezone, not the server's.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Phone Numbers</div>
+        <span class="route">/admin/phone-numbers</span>
+        <span class="flag">multi-tenant routing</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">The routing table that makes one system serve many clinics. Technically the most important screen in the console.</p>
+        <ul class="does">
+          <li>Assign a number to a clinic, with a label such as "Main reception" and the telephony trunk it arrives on</li>
+          <li>Numbers are globally unique — one number belongs to exactly one clinic, and that is enforced, not conventional</li>
+        </ul>
+        <div class="note warn">
+          <span class="tag">How a call finds its clinic</span>
+          <p>One agent worker serves every clinic. When a call arrives the agent reads the <strong>number that was dialled</strong>, looks it up here, and gets back that clinic's identity, timezone, greeting and voice — then handles the call as that clinic. Clinics are not separate deployments, and onboarding one is adding a row here rather than standing up a server.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Support</div>
+        <span class="route">/admin/support</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">The other end of the clinic's support screen — the operator's inbox.</p>
+        <ul class="does">
+          <li>Requests from every clinic, filterable by clinic and by status</li>
+          <li>Pairs with impersonation on the organisation screen: read the request, then go and see what they saw</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-id">
+        <div class="nm">Audit logs</div>
+        <span class="route">/admin/audit-log</span>
+      </div>
+      <div class="screen-body">
+        <p class="purpose">The platform's own record of what operators did — the accountability layer over this whole console.</p>
+        <ul class="does">
+          <li>Timestamp, which super admin, the action, the clinic affected, any target user, the resource touched, and success or failure</li>
+          <li>Filter by action, clinic, status or date; search across everything; platform-wide entries are marked as such</li>
+          <li>Each entry keeps its own ID and the originating user agent, so a specific action can be cited later</li>
+        </ul>
+        <div class="note crit">
+          <span class="tag">Two logs, not one</span>
+          <p>This is <strong>not</strong> the same log as the clinic's Security page. This one records cross-clinic operator actions — suspensions, plan changes, impersonations — and clinics cannot see it. Theirs records access to their own patient data, and is the page they would show an auditor. Failed actions are recorded here too, which is the point: an attempt that did not succeed is exactly what an investigation needs to see.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p class="foot">
+    27 screens · 4 entry · 13 clinic workspace · 10 platform console.<br>
+    Verified against the running application, 04 Sep 2026.<br>
+    Companion document: the demo running order.
+  </p>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+# Secrets — NEVER commit. See ../../SECURITY-ROTATION.md.
+.env
+.env.*
+!.env.example
+voice-agent/.env
+voice-agent/.env.*
+!voice-agent/.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Runtime data — uploaded knowledge-base documents may contain PHI.
+uploads/
+*.db
+*.sqlite3
+voice-agent/KMS/logs/
+*.log
+
+# Ad-hoc backup copies. The root .gitignore covers these, but only
+# for a repository rooted at the parent — `git init` in this
+# directory would otherwise track `agent.py.bak-filler` and friends.
+*.bak
+*.bak-*
+_backups/
